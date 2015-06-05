@@ -2,7 +2,6 @@ package interfaces
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/arnoldcano/teaxdeax/domain"
 )
@@ -28,65 +27,67 @@ func NewTodoRepository(db Database) *TodoRepository {
 	}
 }
 
-func (repo *TodoRepository) Create(todo *domain.Todo) error {
+func (r *TodoRepository) Create(todo *domain.Todo) error {
 	query := fmt.Sprintf(
-		"INSERT INTO todos (id, note, created_at, updated_at) VALUES ('%v', '%v', '%v', '%v')",
+		"INSERT INTO todos (id, note) VALUES ('%v', '%v')",
 		todo.Id,
 		todo.Note,
-		todo.CreatedAt,
-		todo.UpdatedAt,
 	)
-	if err := repo.db.Execute(query); err != nil {
+	if err := r.db.Execute(query); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (repo *TodoRepository) FindAll() ([]*domain.Todo, error) {
-	var todos []*domain.Todo
-	var id string
-	var note string
-	var createdAt time.Time
-	var updatedAt time.Time
-	rows, err := repo.db.Query("SELECT id, note, created_at, updated_at FROM todos")
+func (r *TodoRepository) FindAll() ([]*domain.Todo, error) {
+	var (
+		todos []*domain.Todo
+		id    string
+		note  string
+	)
+	rows, err := r.db.Query("SELECT id, note FROM todos")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan(&id, &note, &createdAt, &updatedAt)
+		err := rows.Scan(&id, &note)
 		if err != nil {
 			return nil, err
 		}
-		todo := domain.NewTodo(id, note, createdAt, updatedAt)
+		todo := domain.NewTodo(id, note)
 		todos = append(todos, todo)
 	}
 	return todos, nil
 }
 
-func (repo *TodoRepository) FindById(id string) (*domain.Todo, error) {
+func (r *TodoRepository) FindById(id string) (*domain.Todo, error) {
 	var note string
-	var createdAt time.Time
-	var updatedAt time.Time
-	query := fmt.Sprintf(
-		"SELECT note, created_at, updated_at FROM todos WHERE id = '%v'", id,
-	)
-	rows, err := repo.db.Query(query)
+	query := fmt.Sprintf("SELECT note FROM todos WHERE id = '%v'", id)
+	rows, err := r.db.Query(query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	rows.Next()
-	if err = rows.Scan(&note, &createdAt, &updatedAt); err != nil {
+	if err = rows.Scan(&note); err != nil {
 		return nil, err
 	}
-	todo := domain.NewTodo(id, note, createdAt, updatedAt)
+	todo := domain.NewTodo(id, note)
 	return todo, nil
 }
 
-func (repo *TodoRepository) DeleteById(id string) error {
+func (r *TodoRepository) Update(todo *domain.Todo) error {
+	query := fmt.Sprintf("UPDATE todos SET note='%v' WHERE id='%v'", todo.Note, todo.Id)
+	if err := r.db.Execute(query); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *TodoRepository) DeleteById(id string) error {
 	query := fmt.Sprintf("DELETE FROM todos WHERE id='%v'", id)
-	if err := repo.db.Execute(query); err != nil {
+	if err := r.db.Execute(query); err != nil {
 		return err
 	}
 	return nil

@@ -23,9 +23,12 @@ func main() {
 	todosRouter.Methods("GET").HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		todoHandler.Index(res, req)
 	})
-	todoRouter := router.Path("/todo/{id}").Subrouter()
+	todoRouter := router.Path("/todos/{id}").Subrouter()
 	todoRouter.Methods("GET").HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		todoHandler.Show(res, req)
+	})
+	todoRouter.Methods("PUT").HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		todoHandler.Update(res, req)
 	})
 	todoRouter.Methods("DELETE").HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		todoHandler.Destroy(res, req)

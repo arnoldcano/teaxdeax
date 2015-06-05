@@ -18,15 +18,15 @@ func NewSqliteHandler(fileName string) *SqliteHandler {
 	}
 }
 
-func (handler *SqliteHandler) Execute(query string) error {
-	if _, err := handler.conn.Exec(query); err != nil {
+func (h *SqliteHandler) Execute(query string) error {
+	if _, err := h.conn.Exec(query); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (handler *SqliteHandler) Query(query string) (interfaces.Rows, error) {
-	rows, err := handler.conn.Query(query)
+func (h *SqliteHandler) Query(query string) (interfaces.Rows, error) {
+	rows, err := h.conn.Query(query)
 	if err != nil {
 		return nil, err
 	}
@@ -37,20 +37,20 @@ type SqliteRows struct {
 	rows *sql.Rows
 }
 
-func NewSqliteRows(rows *sql.Rows) *SqliteRows {
+func NewSqliteRows(r *sql.Rows) *SqliteRows {
 	return &SqliteRows{
-		rows: rows,
+		rows: r,
 	}
 }
 
-func (rows *SqliteRows) Scan(dest ...interface{}) error {
-	return rows.rows.Scan(dest...)
+func (r *SqliteRows) Scan(dest ...interface{}) error {
+	return r.rows.Scan(dest...)
 }
 
-func (rows *SqliteRows) Next() bool {
-	return rows.rows.Next()
+func (r *SqliteRows) Next() bool {
+	return r.rows.Next()
 }
 
-func (rows *SqliteRows) Close() error {
-	return rows.rows.Close()
+func (r *SqliteRows) Close() error {
+	return r.rows.Close()
 }

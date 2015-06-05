@@ -12,32 +12,40 @@ func NewTodoInteractor(repo domain.TodoRepository) *TodoInteractor {
 	}
 }
 
-func (interactor *TodoInteractor) Create(todo *domain.Todo) error {
-	err := interactor.repo.Create(todo)
+func (i *TodoInteractor) Create(todo *domain.Todo) error {
+	err := i.repo.Create(todo)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (interactor *TodoInteractor) FindAll() ([]*domain.Todo, error) {
-	todos, err := interactor.repo.FindAll()
+func (i *TodoInteractor) FindAll() ([]*domain.Todo, error) {
+	todos, err := i.repo.FindAll()
 	if err != nil {
 		return nil, err
 	}
 	return todos, nil
 }
 
-func (interactor *TodoInteractor) FindById(id string) (*domain.Todo, error) {
-	todo, err := interactor.repo.FindById(id)
+func (i *TodoInteractor) FindById(id string) (*domain.Todo, error) {
+	todo, err := i.repo.FindById(id)
 	if err != nil {
 		return nil, err
 	}
 	return todo, nil
 }
 
-func (interactor *TodoInteractor) DeleteById(id string) error {
-	err := interactor.repo.DeleteById(id)
+func (i *TodoInteractor) Update(todo *domain.Todo) error {
+	err := i.repo.Update(todo)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (i *TodoInteractor) DeleteById(id string) error {
+	err := i.repo.DeleteById(id)
 	if err != nil {
 		return err
 	}
