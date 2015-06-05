@@ -17,17 +17,17 @@ type Rows interface {
 	Close() error
 }
 
-type TodoRepository struct {
+type TodosRepository struct {
 	db Database
 }
 
-func NewTodoRepository(db Database) *TodoRepository {
-	return &TodoRepository{
+func NewTodosRepository(db Database) *TodosRepository {
+	return &TodosRepository{
 		db: db,
 	}
 }
 
-func (r *TodoRepository) Create(todo *domain.Todo) error {
+func (r *TodosRepository) Create(todo *domain.Todo) error {
 	query := fmt.Sprintf(
 		"INSERT INTO todos (id, note) VALUES ('%v', '%v')",
 		todo.Id,
@@ -39,7 +39,7 @@ func (r *TodoRepository) Create(todo *domain.Todo) error {
 	return nil
 }
 
-func (r *TodoRepository) FindAll() ([]*domain.Todo, error) {
+func (r *TodosRepository) FindAll() ([]*domain.Todo, error) {
 	var (
 		todos []*domain.Todo
 		id    string
@@ -61,7 +61,7 @@ func (r *TodoRepository) FindAll() ([]*domain.Todo, error) {
 	return todos, nil
 }
 
-func (r *TodoRepository) FindById(id string) (*domain.Todo, error) {
+func (r *TodosRepository) FindById(id string) (*domain.Todo, error) {
 	var note string
 	query := fmt.Sprintf("SELECT note FROM todos WHERE id = '%v'", id)
 	rows, err := r.db.Query(query)
@@ -77,7 +77,7 @@ func (r *TodoRepository) FindById(id string) (*domain.Todo, error) {
 	return todo, nil
 }
 
-func (r *TodoRepository) Update(todo *domain.Todo) error {
+func (r *TodosRepository) Update(todo *domain.Todo) error {
 	query := fmt.Sprintf("UPDATE todos SET note='%v' WHERE id='%v'", todo.Note, todo.Id)
 	if err := r.db.Execute(query); err != nil {
 		return err
@@ -85,7 +85,7 @@ func (r *TodoRepository) Update(todo *domain.Todo) error {
 	return nil
 }
 
-func (r *TodoRepository) DeleteById(id string) error {
+func (r *TodosRepository) DeleteById(id string) error {
 	query := fmt.Sprintf("DELETE FROM todos WHERE id='%v'", id)
 	if err := r.db.Execute(query); err != nil {
 		return err

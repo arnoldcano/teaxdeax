@@ -1,6 +1,6 @@
 package domain
 
-type TodoRepository interface {
+type TodosRepository interface {
 	Create(*Todo) error
 	FindAll() ([]*Todo, error)
 	FindById(string) (*Todo, error)

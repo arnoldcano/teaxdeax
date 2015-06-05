@@ -2,17 +2,17 @@ package usecases
 
 import "github.com/arnoldcano/teaxdeax/domain"
 
-type TodoInteractor struct {
-	repo domain.TodoRepository
+type TodosInteractor struct {
+	repo domain.TodosRepository
 }
 
-func NewTodoInteractor(repo domain.TodoRepository) *TodoInteractor {
-	return &TodoInteractor{
+func NewTodosInteractor(repo domain.TodosRepository) *TodosInteractor {
+	return &TodosInteractor{
 		repo: repo,
 	}
 }
 
-func (i *TodoInteractor) Create(todo *domain.Todo) error {
+func (i *TodosInteractor) Create(todo *domain.Todo) error {
 	err := i.repo.Create(todo)
 	if err != nil {
 		return err
@@ -20,7 +20,7 @@ func (i *TodoInteractor) Create(todo *domain.Todo) error {
 	return nil
 }
 
-func (i *TodoInteractor) FindAll() ([]*domain.Todo, error) {
+func (i *TodosInteractor) FindAll() ([]*domain.Todo, error) {
 	todos, err := i.repo.FindAll()
 	if err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func (i *TodoInteractor) FindAll() ([]*domain.Todo, error) {
 	return todos, nil
 }
 
-func (i *TodoInteractor) FindById(id string) (*domain.Todo, error) {
+func (i *TodosInteractor) FindById(id string) (*domain.Todo, error) {
 	todo, err := i.repo.FindById(id)
 	if err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func (i *TodoInteractor) FindById(id string) (*domain.Todo, error) {
 	return todo, nil
 }
 
-func (i *TodoInteractor) Update(todo *domain.Todo) error {
+func (i *TodosInteractor) Update(todo *domain.Todo) error {
 	err := i.repo.Update(todo)
 	if err != nil {
 		return err
@@ -44,7 +44,7 @@ func (i *TodoInteractor) Update(todo *domain.Todo) error {
 	return nil
 }
 
-func (i *TodoInteractor) DeleteById(id string) error {
+func (i *TodosInteractor) DeleteById(id string) error {
 	err := i.repo.DeleteById(id)
 	if err != nil {
 		return err

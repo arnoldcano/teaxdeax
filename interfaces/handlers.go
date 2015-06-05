@@ -11,17 +11,17 @@ import (
 	"github.com/unrolled/render"
 )
 
-type TodoHandler struct {
-	interactor *usecases.TodoInteractor
+type TodosHandler struct {
+	interactor *usecases.TodosInteractor
 }
 
-func NewTodoHandler(interactor *usecases.TodoInteractor) *TodoHandler {
-	return &TodoHandler{
+func NewTodosHandler(interactor *usecases.TodosInteractor) *TodosHandler {
+	return &TodosHandler{
 		interactor: interactor,
 	}
 }
 
-func (h *TodoHandler) Create(res http.ResponseWriter, req *http.Request) {
+func (h *TodosHandler) Create(res http.ResponseWriter, req *http.Request) {
 	id := uuid.New()
 	note := req.FormValue("note")
 	todo := domain.NewTodo(id, note)
@@ -31,7 +31,7 @@ func (h *TodoHandler) Create(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (h *TodoHandler) Index(res http.ResponseWriter, req *http.Request) {
+func (h *TodosHandler) Index(res http.ResponseWriter, req *http.Request) {
 	todos, err := h.interactor.FindAll()
 	if err != nil {
 		http.Error(res, err.Error(), http.StatusNotFound)
@@ -40,7 +40,7 @@ func (h *TodoHandler) Index(res http.ResponseWriter, req *http.Request) {
 	render.JSON(res, http.StatusOK, todos)
 }
 
-func (h *TodoHandler) Show(res http.ResponseWriter, req *http.Request) {
+func (h *TodosHandler) Show(res http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	id := vars["id"]
 	todo, err := h.interactor.FindById(id)
@@ -51,7 +51,7 @@ func (h *TodoHandler) Show(res http.ResponseWriter, req *http.Request) {
 	render.JSON(res, http.StatusOK, todo)
 }
 
-func (h *TodoHandler) Update(res http.ResponseWriter, req *http.Request) {
+func (h *TodosHandler) Update(res http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	id := vars["id"]
 	note := req.FormValue("note")
@@ -62,7 +62,7 @@ func (h *TodoHandler) Update(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (h *TodoHandler) Destroy(res http.ResponseWriter, req *http.Request) {
+func (h *TodosHandler) Destroy(res http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	id := vars["id"]
 	err := h.interactor.DeleteById(id)
