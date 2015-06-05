@@ -33,8 +33,11 @@ func (handler *TodoHandler) Create(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (handler *TodoHandler) FindAll(res http.ResponseWriter, req *http.Request) {
-	todos, _ := handler.interactor.FindAll()
+func (handler *TodoHandler) Index(res http.ResponseWriter, req *http.Request) {
+	todos, err := handler.interactor.FindAll()
+	if err != nil {
+		http.Error(res, err.Error(), http.StatusNotFound)
+	}
 	js, err := json.Marshal(todos)
 	if err != nil {
 		http.Error(res, err.Error(), http.StatusInternalServerError)
@@ -43,14 +46,26 @@ func (handler *TodoHandler) FindAll(res http.ResponseWriter, req *http.Request) 
 	res.Write(js)
 }
 
-func (handler *TodoHandler) FindById(res http.ResponseWriter, req *http.Request) {
+func (handler *TodoHandler) Show(res http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	id := vars["id"]
-	todo, _ := handler.interactor.FindById(id)
+	todo, err := handler.interactor.FindById(id)
+	if err != nil {
+		http.Error(res, err.Error(), http.StatusNotFound)
+	}
 	js, err := json.Marshal(todo)
 	if err != nil {
 		http.Error(res, err.Error(), http.StatusInternalServerError)
 	}
 	res.Header().Set("Content-Type", "application/json")
 	res.Write(js)
+}
+
+func (handler *TodoHandler) Destroy(res http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	id := vars["id"]
+	err := handler.interactor.DeleteById(id)
+	if err != nil {
+		http.Error(res, err.Error(), http.StatusNotFound)
+	}
 }

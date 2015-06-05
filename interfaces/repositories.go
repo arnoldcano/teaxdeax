@@ -83,3 +83,11 @@ func (repo *TodoRepository) FindById(id string) (*domain.Todo, error) {
 	todo := domain.NewTodo(id, note, createdAt, updatedAt)
 	return todo, nil
 }
+
+func (repo *TodoRepository) DeleteById(id string) error {
+	query := fmt.Sprintf("DELETE FROM todos WHERE id='%v'", id)
+	if err := repo.db.Execute(query); err != nil {
+		return err
+	}
+	return nil
+}

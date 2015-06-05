@@ -6,6 +6,7 @@ type TodoRepository interface {
 	Create(*Todo) error
 	FindAll() ([]*Todo, error)
 	FindById(string) (*Todo, error)
+	DeleteById(string) error
 }
 
 type Todo struct {

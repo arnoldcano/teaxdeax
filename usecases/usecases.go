@@ -35,3 +35,11 @@ func (interactor *TodoInteractor) FindById(id string) (*domain.Todo, error) {
 	}
 	return todo, nil
 }
+
+func (interactor *TodoInteractor) DeleteById(id string) error {
+	err := interactor.repo.DeleteById(id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
