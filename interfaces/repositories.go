@@ -7,7 +7,7 @@ import (
 	"github.com/arnoldcano/teaxdeax/domain"
 )
 
-type Db interface {
+type Database interface {
 	Execute(statement string) error
 	Query(statement string) (Rows, error)
 }
@@ -19,10 +19,10 @@ type Rows interface {
 }
 
 type TodoRepository struct {
-	db Db
+	db Database
 }
 
-func NewTodoRepository(db Db) *TodoRepository {
+func NewTodoRepository(db Database) *TodoRepository {
 	return &TodoRepository{
 		db: db,
 	}
