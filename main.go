@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/arnoldcano/teaxdeax/infrastructure"
 	"github.com/arnoldcano/teaxdeax/interfaces"
@@ -11,7 +12,7 @@ import (
 )
 
 func main() {
-	db := infrastructure.NewSqliteHandler("todos.sqlite")
+	db := infrastructure.NewSqliteHandler(os.Getenv("DB"))
 	todoRepository := interfaces.NewTodoRepository(db)
 	todoInteractor := usecases.NewTodoInteractor(todoRepository)
 	todoHandler := interfaces.NewTodoHandler(todoInteractor)
