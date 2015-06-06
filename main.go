@@ -12,7 +12,8 @@ import (
 )
 
 func main() {
-	db := infrastructure.NewSqliteHandler(os.Getenv("FILE"))
+	file := os.Getenv("FILE")
+	db := infrastructure.NewSqliteHandler(file)
 	repo := interfaces.NewTodosRepository(db)
 	interactor := usecases.NewTodosInteractor(repo)
 	handler := interfaces.NewTodosHandler(interactor)

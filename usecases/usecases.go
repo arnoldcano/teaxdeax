@@ -13,8 +13,7 @@ func NewTodosInteractor(repo domain.TodosRepository) *TodosInteractor {
 }
 
 func (i *TodosInteractor) Create(todo *domain.Todo) error {
-	err := i.repo.Create(todo)
-	if err != nil {
+	if err := i.repo.Create(todo); err != nil {
 		return err
 	}
 	return nil
@@ -37,16 +36,20 @@ func (i *TodosInteractor) FindById(id string) (*domain.Todo, error) {
 }
 
 func (i *TodosInteractor) Update(todo *domain.Todo) error {
-	err := i.repo.Update(todo)
-	if err != nil {
+	if _, err := i.repo.FindById(todo.Id); err != nil {
+		return err
+	}
+	if err := i.repo.Update(todo); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (i *TodosInteractor) DeleteById(id string) error {
-	err := i.repo.DeleteById(id)
-	if err != nil {
+	if _, err := i.repo.FindById(id); err != nil {
+		return err
+	}
+	if err := i.repo.DeleteById(id); err != nil {
 		return err
 	}
 	return nil

@@ -25,8 +25,7 @@ func (h *TodosHandler) Create(res http.ResponseWriter, req *http.Request) {
 	id := uuid.New()
 	note := req.FormValue("note")
 	todo := domain.NewTodo(id, note)
-	err := h.interactor.Create(todo)
-	if err != nil {
+	if err := h.interactor.Create(todo); err != nil {
 		http.Error(res, err.Error(), http.StatusInternalServerError)
 	}
 }
@@ -56,8 +55,7 @@ func (h *TodosHandler) Update(res http.ResponseWriter, req *http.Request) {
 	id := vars["id"]
 	note := req.FormValue("note")
 	todo := domain.NewTodo(id, note)
-	err := h.interactor.Update(todo)
-	if err != nil {
+	if err := h.interactor.Update(todo); err != nil {
 		http.Error(res, err.Error(), http.StatusInternalServerError)
 	}
 }
@@ -65,8 +63,7 @@ func (h *TodosHandler) Update(res http.ResponseWriter, req *http.Request) {
 func (h *TodosHandler) Destroy(res http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	id := vars["id"]
-	err := h.interactor.DeleteById(id)
-	if err != nil {
+	if err := h.interactor.DeleteById(id); err != nil {
 		http.Error(res, err.Error(), http.StatusNotFound)
 	}
 }
