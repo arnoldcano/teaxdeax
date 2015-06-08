@@ -7,8 +7,8 @@ import (
 )
 
 type Database interface {
-	Execute(statement string) error
-	Query(statement string) (Rows, error)
+	Execute(query string) error
+	Query(query string) (Rows, error)
 }
 
 type Rows interface {

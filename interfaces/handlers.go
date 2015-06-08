@@ -6,16 +6,23 @@ import (
 	"code.google.com/p/go-uuid/uuid"
 
 	"github.com/arnoldcano/teaxdeax/domain"
-	"github.com/arnoldcano/teaxdeax/usecases"
 	"github.com/gorilla/mux"
 	"github.com/unrolled/render"
 )
 
-type TodosHandler struct {
-	interactor *usecases.TodosInteractor
+type TodosInteractor interface {
+	Create(*domain.Todo) error
+	FindAll() ([]*domain.Todo, error)
+	FindById(string) (*domain.Todo, error)
+	Update(*domain.Todo) error
+	DeleteById(string) error
 }
 
-func NewTodosHandler(interactor *usecases.TodosInteractor) *TodosHandler {
+type TodosHandler struct {
+	interactor TodosInteractor
+}
+
+func NewTodosHandler(interactor TodosInteractor) *TodosHandler {
 	return &TodosHandler{
 		interactor: interactor,
 	}
@@ -64,6 +71,6 @@ func (h *TodosHandler) Destroy(res http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	id := vars["id"]
 	if err := h.interactor.DeleteById(id); err != nil {
-		http.Error(res, err.Error(), http.StatusNotFound)
+		http.Error(res, err.Error(), http.StatusInternalServerError)
 	}
 }

@@ -11,8 +11,8 @@ type SqliteHandler struct {
 	conn *sql.DB
 }
 
-func NewSqliteHandler(fileName string) *SqliteHandler {
-	conn, _ := sql.Open("sqlite3", fileName)
+func NewSqliteHandler(file string) *SqliteHandler {
+	conn, _ := sql.Open("sqlite3", file)
 	return &SqliteHandler{
 		conn: conn,
 	}
