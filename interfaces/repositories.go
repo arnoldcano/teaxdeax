@@ -15,6 +15,7 @@ type Rows interface {
 	Scan(dest ...interface{}) error
 	Next() bool
 	Close() error
+	Err() error
 }
 
 type TodosRepository struct {
@@ -57,6 +58,9 @@ func (r *TodosRepository) FindAll() ([]*domain.Todo, error) {
 		}
 		todo := domain.NewTodo(id, note)
 		todos = append(todos, todo)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
 	}
 	return todos, nil
 }

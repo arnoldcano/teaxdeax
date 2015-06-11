@@ -41,6 +41,7 @@ func (h *TodosHandler) Index(res http.ResponseWriter, req *http.Request) {
 	todos, err := h.interactor.FindAll()
 	if err != nil {
 		http.Error(res, err.Error(), http.StatusNotFound)
+		return
 	}
 	render := render.New()
 	render.JSON(res, http.StatusOK, todos)
@@ -52,6 +53,7 @@ func (h *TodosHandler) Show(res http.ResponseWriter, req *http.Request) {
 	todo, err := h.interactor.FindById(id)
 	if err != nil {
 		http.Error(res, err.Error(), http.StatusNotFound)
+		return
 	}
 	render := render.New()
 	render.JSON(res, http.StatusOK, todo)

@@ -54,3 +54,7 @@ func (r *SqliteRows) Next() bool {
 func (r *SqliteRows) Close() error {
 	return r.rows.Close()
 }
+
+func (r *SqliteRows) Err() error {
+	return r.rows.Err()
+}

@@ -36,6 +36,10 @@ func (r *RowsStub) Close() error {
 	return nil
 }
 
+func (r *RowsStub) Err() error {
+	return nil
+}
+
 func init() {
 	todosRepository = NewTodosRepository(databaseStub)
 }
